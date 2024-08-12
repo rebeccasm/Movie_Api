@@ -16,3 +16,27 @@ Timestamp: Wed Aug 07 2024 10:13:19 GMT+0200 (Central European Summer Time)
 URL: /favicon.ico
 Timestamp: Wed Aug 07 2024 10:13:19 GMT+0200 (Central European Summer Time)
 
+URL: /
+Timestamp: Mon Aug 12 2024 20:05:24 GMT+0200 (Central European Summer Time)
+
+URL: /movies
+Timestamp: Mon Aug 12 2024 20:06:41 GMT+0200 (Central European Summer Time)
+
+URL: /favicon.ico
+Timestamp: Mon Aug 12 2024 20:06:42 GMT+0200 (Central European Summer Time)
+
+URL: /movies
+Timestamp: Mon Aug 12 2024 20:08:02 GMT+0200 (Central European Summer Time)
+
+URL: /favicon.ico
+Timestamp: Mon Aug 12 2024 20:08:02 GMT+0200 (Central European Summer Time)
+
+URL: /movies
+Timestamp: Mon Aug 12 2024 20:08:20 GMT+0200 (Central European Summer Time)
+
+URL: /favicon.ico
+Timestamp: Mon Aug 12 2024 20:08:21 GMT+0200 (Central European Summer Time)
+
+URL: /
+Timestamp: Mon Aug 12 2024 20:13:16 GMT+0200 (Central European Summer Time)
+

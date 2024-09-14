@@ -1,7 +1,7 @@
 {
   "name": "movie_api",
   "version": "1.0.0",
-  "description": "",
+  "description": " This is the server-side project for Movie_api, a web application for viewing information about movies, directors, and genres, as well as managing user profiles and favorite lists.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,10 +12,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.3",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.1",
     "morgan": "^1.10.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

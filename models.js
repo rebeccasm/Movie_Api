@@ -1,6 +1,9 @@
 // models.js
 const mongoose = require('mongoose');
 
+// hashing
+const bcrypt = require('bcrypt');
+
 // Movie Schema
 let movieSchema = mongoose.Schema({
     Title: { type: String, required: true},
@@ -30,6 +33,14 @@ let userSchema = mongoose.Schema({
     Birthday: Date,
     Favorite: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
 });
+  
+  userSchema.statics.hashPassword = (password) => {
+    return bcrypt.hashSync(password, 10);
+  };
+  
+  userSchema.methods.validatePassword = function(password) {
+    return bcrypt.compareSync(password, this.Password);
+  };
 
 // Creation of the Models
 let Movie = mongoose.model('Movie', movieSchema);

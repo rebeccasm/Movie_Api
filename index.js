@@ -5,49 +5,67 @@ const express = require('express'),
       mongoose = require('mongoose'),
       Models = require('./models.js');
 
-      const app = express();
+const app = express();
 
-      const Movies = Models.Movie,
+const Movies = Models.Movie,
       Users = Models.User;
 
 //mongoose.connect('xxx', {xxx});
-mongoose.connect('mongodb://localhost:27017/movieAPI', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(bodyParser.json());
+
+const cors = require('cors');
+app.use(cors());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Import auth.js
 let auth = require('./auth')(app);
 
-// Import passport and passport.js
 const passport = require('passport');
-require('./passport');
+      require('./passport');
 
-// Morgan middleware to log all requests to the terminal
-app.use(morgan('combined'));
+const { check, validationResult } = require('express-validator');
 
-// Serve static files from the "public" directory
+    check('Username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric()
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Express static function
+app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-    res.send('Welcome to my app!');
-});
+// Middleware
+app.use(morgan('common'));
+
 
 //CREATE
 //Add a user
 app.post('/users',
+    [
+      check('Username', 'Username is required').isLength({ min: 5 }),
+      check(
+        'Username',
+        'Username contains non alphanumeric characters - not allowed.'
+      ).isAlphanumeric(),
+      check('Password', 'Password is required').not().isEmpty(),
+      check('Email', 'Email does not appear to be valid').isEmail(),
+    ],
     async (req, res) => {
-    //   let hashedPassword = Users.hashPassword(req.body.Password);
+      // check the validation object for errors
+      let errors = validationResult(req);
+  
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
+      let hashedPassword = Users.hashPassword(req.body.Password);
+      //Search to see if a user wit the requested username alredy exists
       await Users.findOne({ Username: req.body.Username })
         .then((user) => {
           if (user) {
+            // If the user is found, send a response that it alredy exists
             return res.status(400).send(req.body.Username + ' already exists.');
           } else {
             Users.create({
               Username: req.body.Username,
-              Password: req.body.Password,
+              Password: hashedPassword,
               Email: req.body.Email,
               Birthday: req.body.Birthday,
             })
@@ -71,9 +89,25 @@ app.post('/users',
 // A user's info, by username
 app.put(
     '/users/:Username',
+    passport.authenticate('jwt', { session: false }),
+    [
+      check('Username', 'Username is required').isLength({ min: 5 }),
+      check(
+        'Username',
+        'Username contains non alphanumeric characters - not allowed.'
+      ).isAlphanumeric(),
+      check('Password', 'Password is required').not().isEmpty(),
+      check('Email', 'Email does not appear to be valid').isEmail(),
+    ],
     async (req, res) => {
+      // check the validation object for errors
+      let errors = validationResult(req);
+  
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
       // CONDITION TO CHECK ADDED HERE
-      if (req.body.Username !== req.params.Username) {
+      if (req.user.Username !== req.params.Username) {
         return res.status(400).send('Permission denied');
       }
       // CONDITION ENDS
@@ -152,7 +186,7 @@ app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), a
 
 // READ
 app.get('/', (req, res) => {
-    res.send('Welcome to Movie_API!');
+    res.send('Welcome to myFlix!');
 });
 
 // READ
@@ -239,16 +273,17 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), asyn
         });
 });
 
-//Middleware for serving static files from the public directory
+// Middleware for serving static files from the public directory
 app.use(express.static('public'));
 
-// Error-handling middleware
+// Error-handling middleware called when an error occurs
 app.use((err, req, res, next) => {
-    console.error('Error:', err.stack);
+    console.error(err.stack);
     res.status(500).send('Something broke!');
 });
 
-// Start the server
-app.listen(8080, () => {
-    console.log('Your app is listening on port 8080.');
+// Start the server and listen for requests on port 8080
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
 });

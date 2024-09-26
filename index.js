@@ -1,17 +1,20 @@
-const express = require('express'),
-      morgan = require('morgan'),
-      uuid = require('uuid'),
-      bodyParser = require('body-parser'),
-      mongoose = require('mongoose'),
-      Models = require('./models.js');
+const mongoose = require('mongoose');
+const Models = require('./models.js');
 
-const app = express();
-
-const Movies = Models.Movie,
-      Users = Models.User;
+const Movies = Models.Movie;
+const Users = Models.User;
 
 //mongoose.connect('xxx', {xxx});
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/myDB', { useNewUrlParser: true, useUnifiedTopology: true });
+
+const express = require('express');
+const morgan = require('morgan');
+// const uuid = require('uuid');
+const bodyParser = require('body-parser');
+
+
+const app = express();
 
 app.use(bodyParser.json());
 

@@ -292,10 +292,10 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server and listen for requests on port 8080
-// const port = process.env.PORT || 8080;
-// app.listen(port, '0.0.0.0',() => {
-//  console.log('Listening on Port ' + port);
-// });
-app.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
 });
+// app.listen(process.env.PORT || 3000, function(){
+//   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+// });

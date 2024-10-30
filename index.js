@@ -6,7 +6,13 @@ const Users = Models.User;
 
 //mongoose.connect('xxx', {xxx});
 // mongoose.connect('mongodb://localhost:27017/myDB', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+ const mongoose = require('mongoose');
+   const mongoURI = process.env.MONGODB_URI;
+
+   mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+       .then(() => console.log("MongoDB connected"))
+       .catch(err => console.log(err));
 
 const express = require('express');
 const morgan = require('morgan');
@@ -286,7 +292,10 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server and listen for requests on port 8080
-const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0',() => {
- console.log('Listening on Port ' + port);
+// const port = process.env.PORT || 8080;
+// app.listen(port, '0.0.0.0',() => {
+//  console.log('Listening on Port ' + port);
+// });
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });

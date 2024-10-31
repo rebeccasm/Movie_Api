@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const mongoURI = process.env.MONGODB_URI;
+const mongoURI = process.env.MONGODB_URI;
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
@@ -7,12 +7,12 @@ const Users = Models.User;
 
 //mongoose.connect('xxx', {xxx});
 // mongoose.connect('mongodb://localhost:27017/myDB', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
-// mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-//         .then(() => console.log("MongoDB connected"))
-//         .catch(err => console.log(err));
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(() => console.log("MongoDB connected"))
+        .catch(err => console.log(err));
 
 const express = require('express');
 const morgan = require('morgan');

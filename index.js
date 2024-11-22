@@ -1,5 +1,4 @@
 const express = require('express'); //import express module which is a web application framework for Node.js
-const app = express(); //create an instance of express
 const morgan = require('morgan'); //import morgan module for logging
 const bodyParser = require('body-parser'); //import body-parser module for parsing incoming request bodies
 const uuid = require("uuid"); //import uuid module for generating unique ids
@@ -11,8 +10,9 @@ const { check, validationResult } = require("express-validator");
 const Movies = Models.Movie; //import the Movie model from models.js
 const Users = Models.User;
 
+const app = express(); //create an instance of express
 app.use(morgan('common')); // Middleware
-app.use(bodyParser.json()); //lets us    be able to read data from body object
+app.use(bodyParser.json()); //lets us be able to read data from body object
 app.use(express.urlencoded({ extended: true })); //allows us to read data from the body of POST requests
 
 const cors = require('cors'); //import cors module to allow requests from all origins

@@ -112,7 +112,7 @@ app.post('/users',
 
 // UPDATE
 // Add a movie to a user's list of favorites
-app.patch('/users/:Username/movies/:MovieID', 
+app.patch('/users/:Username/:title', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
     await Users.findOneAndUpdate(
@@ -122,7 +122,27 @@ app.patch('/users/:Username/movies/:MovieID',
       },
       { new: true }) // This line makes sure that the updated document is returned
         .then((updatedUser) => {
-          res.json(updatedUser);
+          res.status(201).json(updatedUser);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+});
+
+// DELETE
+// Remove a movie from a user's list of favorites
+app.delete('/users/:Username/:title', 
+  passport.authenticate('jwt', {session: false}), 
+  async (req, res) => {
+    await Users.findOneAndUpdate(
+      { Username: req.params.Username }, 
+      {
+        $pull: { FavoriteMovies: req.params.MovieID }
+      },
+      { new: true }) // This line makes sure that the updated document is returned
+        .then((updatedUser) => {
+          res.status(201).json(updatedUser);
       })
       .catch((err) => {
         console.error(err);
@@ -182,7 +202,7 @@ app.get('/movies/:title',
   async (req, res) => {
    await Movies.findOne({ title: req.params.title }) //pass a parameter(title) to the findOne method to find a movie by title
       .then((movie) => {
-        res.json(movie);
+        res.status(201).json(movie);
       })
       .catch((err) => {
         console.error(err);
@@ -192,10 +212,10 @@ app.get('/movies/:title',
 
 // READ
 // Return data about a director (bio, birthyear, deathyear) by name
-app.get('/directors/:directorName', 
+app.get('/director/:directorName', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
-      await Movies.findOne({ "director.name": req.params.name })
+      await Director.findOne({ "director.name": req.params.name })
       .then((director) => {
         res.json(director.director);
       })
@@ -210,7 +230,7 @@ app.get('/directors/:directorName',
 app.get('/genre/:genreName', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
-     await Movies.findOne({ "genre.name": req.params.name })
+     await Genre.findOne({ "genre.name": req.params.name })
       .then((genre) => {
         res.json(genre.genre);
       })

@@ -114,7 +114,7 @@ app.post('/users',
 
 // UPDATE
 // Add a movie to a user's list of favorites
-app.patch('/users/:Username/movieId', 
+app.patch('/users/:Username/MovieID', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
     await Users.findOneAndUpdate(
@@ -134,7 +134,7 @@ app.patch('/users/:Username/movieId',
 
 // DELETE
 // Remove a movie from a user's list of favorites
-app.delete('/users/:Username/movieId', 
+app.delete('/users/:Username/MovieID', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
     await Users.findOneAndUpdate(
@@ -202,7 +202,7 @@ app.get('/movies',
 app.get('/movies/:title', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
-   await Movies.findOne({ title: req.params.title }) //pass a parameter(title) to the findOne method to find a movie by title
+   await Movies.findOne({ Title: req.params.title }) //pass a parameter(title) to the findOne method to find a movie by title
       .then((movie) => {
         res.status(201).json(movie);
       })

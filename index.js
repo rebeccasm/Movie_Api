@@ -114,7 +114,7 @@ app.post('/users',
 
 // UPDATE
 // Add a movie to a user's list of favorites
-app.patch('/users/:Username/MovieID', 
+app.patch('/users/:Username/:MovieID', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
     await Users.findOneAndUpdate(
@@ -134,7 +134,7 @@ app.patch('/users/:Username/MovieID',
 
 // DELETE
 // Remove a movie from a user's list of favorites
-app.delete('/users/:Username/MovieID', 
+app.delete('/users/:Username/:MovieID', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
     await Users.findOneAndUpdate(

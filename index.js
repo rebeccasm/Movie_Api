@@ -9,6 +9,8 @@ const { check, validationResult } = require("express-validator");
 
 const Movies = Models.Movie; //import the Movie model from models.js
 const Users = Models.User;
+const Genres = Models.Genre;
+const Directors = Models.Director; 
 
 const app = express(); //create an instance of express
 app.use(morgan('common')); // Middleware
@@ -112,7 +114,7 @@ app.post('/users',
 
 // UPDATE
 // Add a movie to a user's list of favorites
-app.patch('/users/:Username/:title', 
+app.patch('/users/:Username/MovieID', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
     await Users.findOneAndUpdate(
@@ -132,7 +134,7 @@ app.patch('/users/:Username/:title',
 
 // DELETE
 // Remove a movie from a user's list of favorites
-app.delete('/users/:Username/:title', 
+app.delete('/users/:Username/MovieID', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
     await Users.findOneAndUpdate(

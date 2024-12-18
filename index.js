@@ -117,10 +117,30 @@ app.post('/users',
 app.patch('/users/:Username/:MovieID', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
+    const { Username, MovieID } = req.params;
+
+    // Validate MovieID format (assuming it's a UUID)
+    if (!uuid.validate(MovieID)) {
+      return res.status(400).send('Invalid Movie ID format.');
+    }
+
+    // Check if the movie exists
+    const movie = await Movies.findById(MovieID);
+    if (!movie) {
+      return res.status(404).send('Movie not found.');
+    }
+
+    // Check if the user already has this movie in their favorites
+    const user = await Users.findOne({ Username });
+    if (user.FavoriteMovies.includes(MovieID)) {
+      return res.status(400).send('Movie is already in your favorites.');
+    }
+
+    // If all checks pass, add the movie to the user's favorites
     await Users.findOneAndUpdate(
-      { Username: req.params.Username }, 
+      { Username }, 
       {
-        $push: { FavoriteMovies: req.params.MovieID }
+        $push: { FavoriteMovies: MovieID }
       },
       { new: true }) // This line makes sure that the updated document is returned
         .then((updatedUser) => {

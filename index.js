@@ -117,12 +117,13 @@ app.post('/users',
 app.patch('/users/:Username/:MovieID', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
-    const { Username, MovieID } = req.params;
-
-    // Validate MovieID format (assuming it's a UUID)
-    if (!uuid.validate(MovieID)) {
-      return res.status(400).send('Invalid Movie ID format.');
-    }
+    const ObjectId = require('mongoose').Types.ObjectId;
+      function isValidObjectId(id) {    
+        if (ObjectId.isValid(id)) {     
+          if (String(new ObjectId(id)) === id) {       
+            return true      
+          } else {return false}    
+            } else {return false}  }
 
     // Check if the movie exists
     const movie = await Movies.findById(MovieID);
@@ -140,7 +141,7 @@ app.patch('/users/:Username/:MovieID',
     await Users.findOneAndUpdate(
       { Username }, 
       {
-        $push: { FavoriteMovies: MovieID }
+        $addToSet: { FavoriteMovies: MovieID }
       },
       { new: true }) // This line makes sure that the updated document is returned
         .then((updatedUser) => {
@@ -324,24 +325,6 @@ app.put(
         });
     }
   );
-
-// DELETE
-// Delete a movie from a user's list of favorites
-app.delete('/users/:Username/movies/:MovieID', 
-  passport.authenticate('jwt', {session: false}), 
-  async (req, res) => {
-    await Users.findOneAndUpdate({ Username: req.params.Username }, {
-        $pull: { FavoriteMovies: req.params.MovieID }
-    },
-        { new: true }) // This line makes sure that the updated document is returned
-        .then((updatedUser) => {
-            res.json(updatedUser);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        });
-});
 
 // DELETE
 // Delete a user by username

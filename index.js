@@ -117,14 +117,7 @@ app.post('/users',
 app.patch('/users/:Username/:MovieID', 
   passport.authenticate('jwt', {session: false}), 
   async (req, res) => {
-    const ObjectId = require('mongoose').Types.ObjectId;
-      function isValidObjectId(id) {    
-        if (ObjectId.isValid(id)) {     
-          if (String(new ObjectId(id)) === id) {       
-            return true      
-          } else {return false}    
-            } else {return false}  }
-
+   
     // Check if the movie exists
     const movie = await Movies.findById(MovieID);
     if (!movie) {
